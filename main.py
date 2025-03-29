@@ -37,7 +37,7 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send("❌ That command does not exist. Use `!help` to see available commands.")
+        await ctx.send("❌ That command does not exist. Use `$help` to see available commands.")
     else:
         raise error  # Raise other errors normally
 
@@ -70,12 +70,10 @@ async def about(ctx):
         color=discord.Color.blue()  # You can change this to any color you like
     )
 
-    embed.add_field(name="Bot Name", value="YourBotName", inline=False)
+    embed.add_field(name="Bot Name", value="The PR Bot", inline=False)
     embed.add_field(name="Version", value="1.0.0", inline=False)
-    embed.add_field(name="Creator", value="YourName", inline=False)
-    embed.add_field(name="Description", value="A bot created to help with moderation and various server utilities.", inline=False)
-    embed.add_field(name="Invite Link", value="[Your bot's invite link here]", inline=False)
-    embed.add_field(name="Support Server", value="[Link to your support server if you have one]", inline=False)
+    embed.add_field(name="Creator", value="the.username_", inline=False)
+    embed.add_field(name="Description", value="Serving the PR department", inline=False)
 
     await ctx.send(embed=embed)
 
