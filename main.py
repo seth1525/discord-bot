@@ -38,6 +38,10 @@ async def on_ready():
 async def hello(ctx):
     await ctx.send(f"Hello, {ctx.author.mention}!")
 
+@bot.command()
+async def test(ctx):
+    await ctx.send(f"Bot is running!")
+
 # Bulk delete command
 @bot.command()
 @commands.has_permissions(manage_messages=True)  # Ensure the user has the 'Manage Messages' permission
