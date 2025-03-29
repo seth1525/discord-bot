@@ -34,6 +34,13 @@ used_dates = {}
 async def on_ready():
     print(f'{bot.user} is online!')
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("❌ That command does not exist. Use `!help` to see available commands.")
+    else:
+        raise error  # Raise other errors normally
+
 @bot.command()
 async def hello(ctx):
     await ctx.send(f"Hello, {ctx.author.mention}!")
