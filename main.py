@@ -33,6 +33,11 @@ used_dates = {}
 @bot.event
 async def on_ready():
     print(f'{bot.user} is online!')
+    try:
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} command(s)")
+    except Exception as e:
+        print(f"Failed to sync commands: {e}")
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -140,6 +145,28 @@ async def ping(ctx):
     """
     latency = round(bot.latency * 1000)  # Convert latency to milliseconds
     await ctx.send(f"Pong! Latency: {latency}ms")
+
+@bot.tree.command(name="appeal", description="Submit an appeal with username, ID, and date.")
+async def appeal(
+    interaction: discord.Interaction,
+    username: str,
+    appeal_id: str,
+    date: str
+):
+    # Validate date format
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+        await interaction.response.send_message(
+            f"✅ Appeal submitted!\n"
+            f"**Username:** {username}\n"
+            f"**Appeal ID:** {appeal_id}\n"
+            f"**Date:** {date}",
+            ephemeral=True
+        )
+    except ValueError:
+        await interaction.response.send_message(
+            "❌ Invalid date format. Please use `YYYY-MM-DD`.", ephemeral=True
+        )
 
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
