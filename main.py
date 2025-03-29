@@ -132,4 +132,4 @@ async def ping(ctx):
     await ctx.send(f"Pong! Latency: {latency}ms")
 
 # Run the bot with your token
-bot.run("MTI1NzQ2NjI2MjYwNzQ5NTIzMQ.GChWKa.CgaEgtSUFNduD1eNA_DqLrA4ltOwQrhbmVESqQ")
+bot.run("MTI1NzQ2NjI2MjYwNzQ5NTIzMQ.G8YND3.DmiJ3aSWHmulEFi7bRcfmUmab6wO7mGo72xfso")
