@@ -3,6 +3,7 @@ from discord.ext import commands
 from datetime import datetime
 from flask import Flask
 from threading import Thread
+import os
 
 app = Flask(__name__)
 
@@ -132,4 +133,4 @@ async def ping(ctx):
     await ctx.send(f"Pong! Latency: {latency}ms")
 
 # Run the bot with your token
-bot.run("MTI1NzQ2NjI2MjYwNzQ5NTIzMQ.G8YND3.DmiJ3aSWHmulEFi7bRcfmUmab6wO7mGo72xfso")
+bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
