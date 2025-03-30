@@ -1,6 +1,4 @@
 import discord
-from discord.ext import commands
-from datetime import datetime
 from flask import Flask
 from threading import Thread
 import os
