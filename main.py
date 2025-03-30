@@ -86,5 +86,11 @@ class otd_modal(discord.ui.Modal, title="OTD Form"):
 async def otd(interaction: discord.Interaction):
     await interaction.response.send_modal(otd_modal())
 
+#Ping Command
+@bot.tree.command(name="ping", description="Check the bot's latency")
+async def ping(interaction: discord.Interaction):
+    # Respond with "Pong!" and the latency (in milliseconds)
+    await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
+
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
