@@ -143,7 +143,7 @@ class otd(discord.ui.Modal, title="OTD Form"):
 
 @bot.tree.command(name="appeal", description="Open the appeal form")
 async def appeal(interaction: discord.Interaction):
-    await interaction.response.send_modal(AppealModal())
+    await interaction.response.send_modal(otd())
 
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
