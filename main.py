@@ -82,62 +82,7 @@ async def about(ctx):
 
     await ctx.send(embed=embed)
 
-# Event command
-@bot.command()
-async def otd(ctx, name: str, date: str, *, description: str):
-    """
-    Create an event with a name, date (MM-DD format), and description.
-    Prevents duplicate dates in the same channel.
-
-    Example: $otd "Game Night" "03-30" "Join us for an exciting game night!"
-
-    Parameters:
-    - ctx: Context of the command (Discord message info)
-    - name: Name of the event
-    - date: Date in MM-DD format
-    - description: Details about the event
-    """
-
-    print(f"Received name: {name}")
-    print(f"Received date: {date}")
-    print(f"Received description: {description}")
-
-    try:
-        # Convert the date string to a datetime object
-        event_date = datetime.strptime(date, '%m-%d')
-        formatted_date = event_date.strftime('%m-%d')
-
-        # Store used dates per channel
-        channel_id = ctx.channel.id
-        if channel_id not in used_dates:
-            used_dates[channel_id] = set()
-
-        # Check if the date is already used
-        if formatted_date in used_dates[channel_id]:
-            await ctx.send(f"❌ The date **{event_date.strftime('%B %d')}** has already been used. Please choose another date.")
-            return
-
-        # Add the date to the used set
-        used_dates[channel_id].add(formatted_date)
-
-        # Create an embed for the event
-        embed = discord.Embed(
-            title=f"**OTD Style: {name}**",
-            description=description,  # Add the event description
-            color=discord.Color.green()
-        )
-
-        # Display the date and creator
-        embed.add_field(name="OTD Date", value=event_date.strftime('%B %d'), inline=False)
-        embed.add_field(name="Created By", value=ctx.author.mention, inline=False)
-
-        # Send the embed with event details
-        await ctx.send(embed=embed)
-
-    except ValueError:
-        # Handle invalid date format error
-        await ctx.send("❌ Invalid date format. Please use MM-DD (e.g., 03-30).")
-
+#ping command
 @bot.command()
 async def ping(ctx):
     """
@@ -168,6 +113,33 @@ class AppealModal(discord.ui.Modal, title="Appeal Form"):
             await log_channel.send(embed=embed)
 
         await interaction.response.send_message("✅ Appeal submitted successfully!", ephemeral=True)
+
+@bot.tree.command(name="appeal", description="Open the appeal form")
+async def appeal(interaction: discord.Interaction):
+    await interaction.response.send_modal(AppealModal())
+
+#OTD Modal
+class otd(discord.ui.Modal, title="OTD Form"):
+    username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
+    otd = discord.ui.TextInput(label="OTD Style", placeholder="QOTD, ROTD, FOTD, etc.", required=True)
+    date = discord.ui.TextInput(label="Date of OTD", placeholder="Date of publish", required=True)
+    description = discord.ui.TextInput(label="Description of OTD", required=True)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        log_channel_id = 1338640533572030504  # Replace with your channel ID
+        log_channel = interaction.client.get_channel(log_channel_id)
+
+        if log_channel:
+            embed = discord.Embed(title="New OTD Submission", color=discord.Color.blue())
+            embed.add_field(name="Username", value=self.username, inline=True)
+            embed.add_field(name="otd", value=self.otd, inline=True)
+            embed.add_field(name="Date Of OTD", value=self.date, inline=True)
+            embed.add_field(name="Description", value=self.description, inline=True)
+            embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
+
+            await log_channel.send(embed=embed)
+
+        await interaction.response.send_message("✅ OTD submitted successfully!", ephemeral=True)
 
 @bot.tree.command(name="appeal", description="Open the appeal form")
 async def appeal(interaction: discord.Interaction):
