@@ -20,15 +20,7 @@ def keep_alive():
 
 keep_alive()
 
-intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
-intents.message_content = True
-intents.members = True
-
 bot = discord.Bot()
-
-used_dates = {}
 
 @bot.event
 async def on_ready():
