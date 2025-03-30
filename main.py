@@ -146,27 +146,19 @@ async def ping(ctx):
     latency = round(bot.latency * 1000)  # Convert latency to milliseconds
     await ctx.send(f"Pong! Latency: {latency}ms")
 
-@bot.tree.command(name="appeal", description="Submit an appeal with username, ID, and date.")
-async def appeal(
-    interaction: discord.Interaction,
-    username: str,
-    appeal_id: str,
-    date: str
-):
-    # Validate date format
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
+class AppealModal(discord.ui.Modal, title="Appeal Form"):
+    username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
+    appeal_id = discord.ui.TextInput(label="Appeal ID", placeholder="Enter your appeal ID", required=True)
+    date = discord.ui.TextInput(label="Date", placeholder="Enter the date (YYYY-MM-DD)", required=True)
+
+    async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.send_message(
-            f"✅ Appeal submitted!\n"
-            f"**Username:** {username}\n"
-            f"**Appeal ID:** {appeal_id}\n"
-            f"**Date:** {date}",
+            f"✅ Appeal submitted:\n- Username: {self.username}\n- Appeal ID: {self.appeal_id}\n- Date: {self.date}",
             ephemeral=True
         )
-    except ValueError:
-        await interaction.response.send_message(
-            "❌ Invalid date format. Please use `YYYY-MM-DD`.", ephemeral=True
-        )
+@bot.tree.command(name="appeal", description="Open the appeal form")
+async def appeal(interaction: discord.Interaction):
+    await interaction.response.send_modal(AppealModal())
 
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
