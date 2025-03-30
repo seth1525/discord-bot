@@ -105,10 +105,10 @@ class AppealModal(discord.ui.Modal, title="Appeal Form"):
 
         if log_channel:
             embed = discord.Embed(title="New Appeal Submission", color=discord.Color.blue())
-            embed.add_field(name="Username", value=self.username, inline=True)
-            embed.add_field(name="Date", value=self.date, inline=True)
-            embed.add_field(name="Appeal Type", value=self.appeal, inline=True)
-            embed.add_field(name="Reason for Appeal", value=self.reason, inline=True)
+            embed.add_field(name="Username", value=self.username.value, inline=True)
+            embed.add_field(name="Date", value=self.date.value, inline=True)
+            embed.add_field(name="Appeal Type", value=self.appeal.value, inline=True)
+            embed.add_field(name="Reason for Appeal", value=self.reason.value, inline=False)
             embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
 
             await log_channel.send(embed=embed)
@@ -123,7 +123,7 @@ async def appeal(interaction: discord.Interaction):
 class OTD(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
     otd = discord.ui.TextInput(label="OTD Style", placeholder="QOTD, ROTD, FOTD, etc.", required=True)
-    date = discord.ui.TextInput(label="Date of OTD", placeholder="Date of publish", required=True)
+    date = discord.ui.TextInput(label="Date of OTD (YYYY-MM-DD)", placeholder="Date of publish", required=True)
     description = discord.ui.TextInput(label="Description of OTD", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
