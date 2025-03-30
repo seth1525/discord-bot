@@ -3,6 +3,8 @@ from flask import Flask
 from threading import Thread
 import os
 
+bot = discord.Bot()
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -17,8 +19,6 @@ def keep_alive():
     t.start()
 
 keep_alive()
-
-bot = discord.Bot()
 
 @bot.event
 async def on_ready():
