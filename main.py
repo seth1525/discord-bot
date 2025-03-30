@@ -126,36 +126,5 @@ class AppealModal(discord.ui.Modal, title="Appeal Form"):
 async def appeal(interaction: discord.Interaction):
     await interaction.response.send_modal(AppealModal())
 
-#OTD Modal
-class otd_modal(discord.ui.Modal, title="OTD Form"):
-    username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
-    otd = discord.ui.TextInput(label="OTD Style", placeholder="QOTD, ROTD, FOTD, etc.", required=True)
-    date = discord.ui.TextInput(label="Date of OTD (YYYY-MM-DD)", placeholder="Date of publish", required=True)
-    description = discord.ui.TextInput(label="Description of OTD", required=True)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        log_channel_id = 1338640533572030504  # Replace with your channel ID
-        log_channel = interaction.client.get_channel(log_channel_id)
-
-        if log_channel:
-            embed = discord.Embed(title="New OTD Submission", color=discord.Color.blue())
-            
-            # Use `.value` to access the input values
-            embed.add_field(name="Username", value=self.username.value, inline=True)
-            embed.add_field(name="OTD Style", value=self.otd.value, inline=True)
-            embed.add_field(name="Date of OTD", value=self.date.value, inline=True)
-            embed.add_field(name="Description", value=self.description.value, inline=False)
-            
-            embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
-            
-            await log_channel.send(embed=embed)
-
-        await interaction.response.send_message("✅ OTD submitted successfully!", ephemeral=True)
-
-# Correctly instantiate the modal in the command
-@bot.tree.command(name="OTD", description="Open the OTD form")
-async def otd(interaction: discord.Interaction):
-    await interaction.response.send_modal(otd_modal())
-
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
