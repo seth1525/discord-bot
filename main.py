@@ -33,11 +33,9 @@ async def on_ready():
         print(f"Failed to sync commands: {e}")
 
 @bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send("❌ That command does not exist. Use `$help` to see available commands.")
-    else:
-        raise error  # Raise other errors normally
+async def on_error(event, *args, **kwargs):
+    print(f"An error occurred in event: {event}")
+    raise  # Optional: You can raise the error again if you want it to show in the console or log file
 
 #OTD Modal
 class otd_modal(discord.ui.Modal, title="OTD Form"):
