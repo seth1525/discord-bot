@@ -91,41 +91,7 @@ async def ping(ctx):
     """
     latency = round(bot.latency * 1000)  # Convert latency to milliseconds
     await ctx.send(f"Pong! Latency: {latency}ms")
-
-#Appeal Command Modal
-class AppealModal(discord.ui.Modal, title="Appeal Form"):
-    username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
-    appeal = discord.ui.TextInput(label="Decision Being Appealed", placeholder="Ban/Termination/Resignation/Demotion", required=True)
-    date = discord.ui.TextInput(label="Date of Punishment", placeholder="Enter the date of Resignation, Ban, etc. (YYYY-MM-DD)", required=True)
-    reason = discord.ui.TextInput(label="Reason for Appeal", required=True)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        # Validate date format (YYYY-MM-DD)
-        try:
-            datetime.strptime(self.date.value, "%Y-%m-%d")
-        except ValueError:
-            await interaction.response.send_message("❌ Invalid date format! Please enter the date in the format YYYY-MM-DD.", ephemeral=True)
-            return
-
-        log_channel_id = 1348299280959668254  # Replace with your channel ID
-        log_channel = interaction.client.get_channel(log_channel_id)
-
-        if log_channel:
-            embed = discord.Embed(title="New Appeal Submission", color=discord.Color.blue())
-            embed.add_field(name="Username", value=self.username.value, inline=True)
-            embed.add_field(name="Date", value=self.date.value, inline=True)
-            embed.add_field(name="Appeal Type", value=self.appeal.value, inline=True)
-            embed.add_field(name="Reason for Appeal", value=self.reason.value, inline=False)
-            embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id}) on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-            await log_channel.send(embed=embed)
-
-        await interaction.response.send_message("✅ Appeal submitted successfully!", ephemeral=True)
-
-@bot.tree.command(name="appeal", description="Open the appeal form")
-async def appeal(interaction: discord.Interaction):
-    await interaction.response.send_modal(AppealModal())
-
+    
 #OTD Modal
 class otd_modal(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
@@ -161,7 +127,7 @@ class otd_modal(discord.ui.Modal, title="OTD Form"):
             print(f"Error while handling OTD modal submission: {e}")
             await interaction.response.send_message(f"❌ An error occurred while processing your OTD submission: {str(e)}", ephemeral=True)
 
-@bot.tree.command(name="OTD", description="Open the OTD form")
+@bot.tree.command(name="otd", description="Open the OTD form")
 async def otd(interaction: discord.Interaction):
     await interaction.response.send_modal(otd_modal())
 
