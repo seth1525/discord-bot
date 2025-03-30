@@ -161,5 +161,9 @@ class otd_modal(discord.ui.Modal, title="OTD Form"):
             print(f"Error while handling OTD modal submission: {e}")
             await interaction.response.send_message(f"❌ An error occurred while processing your OTD submission: {str(e)}", ephemeral=True)
 
+@bot.tree.command(name="OTD", description="Open the OTD form")
+async def otd(interaction: discord.Interaction):
+    await interaction.response.send_modal(otd_modal())
+
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
