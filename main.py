@@ -100,6 +100,13 @@ class AppealModal(discord.ui.Modal, title="Appeal Form"):
     reason = discord.ui.TextInput(label="Reason for Appeal", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
+        # Validate date format (YYYY-MM-DD)
+        try:
+            datetime.strptime(self.date.value, "%Y-%m-%d")
+        except ValueError:
+            await interaction.response.send_message("❌ Invalid date format! Please enter the date in the format YYYY-MM-DD.", ephemeral=True)
+            return
+
         log_channel_id = 1348299280959668254  # Replace with your channel ID
         log_channel = interaction.client.get_channel(log_channel_id)
 
@@ -109,7 +116,7 @@ class AppealModal(discord.ui.Modal, title="Appeal Form"):
             embed.add_field(name="Date", value=self.date.value, inline=True)
             embed.add_field(name="Appeal Type", value=self.appeal.value, inline=True)
             embed.add_field(name="Reason for Appeal", value=self.reason.value, inline=False)
-            embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
+            embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id}) on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
             await log_channel.send(embed=embed)
 
@@ -120,7 +127,7 @@ async def appeal(interaction: discord.Interaction):
     await interaction.response.send_modal(AppealModal())
 
 #OTD Modal
-class OTD(discord.ui.Modal, title="OTD Form"):
+class otd_modal(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
     otd = discord.ui.TextInput(label="OTD Style", placeholder="QOTD, ROTD, FOTD, etc.", required=True)
     date = discord.ui.TextInput(label="Date of OTD (YYYY-MM-DD)", placeholder="Date of publish", required=True)
@@ -146,9 +153,9 @@ class OTD(discord.ui.Modal, title="OTD Form"):
         await interaction.response.send_message("✅ OTD submitted successfully!", ephemeral=True)
 
 # Correctly instantiate the modal in the command
-@bot.tree.command(name="appeal", description="Open the appeal form")
-async def appeal(interaction: discord.Interaction):
-    await interaction.response.send_modal(OTD())
+@bot.tree.command(name="OTD", description="Open the OTD form")
+async def otd(interaction: discord.Interaction):
+    await interaction.response.send_modal(otd_modal())
 
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
