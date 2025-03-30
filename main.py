@@ -32,10 +32,11 @@ used_dates = {}
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} is online!')
+    print(f"Logged in as {bot.user} (ID: {bot.user.id})")
+    print("Syncing commands...")
     try:
-        synced = await bot.tree.sync()
-        print(f"Synced {len(synced)} command(s)")
+        await bot.tree.sync()  # Sync slash commands
+        print("Commands synced successfully.")
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
