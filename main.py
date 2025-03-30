@@ -119,7 +119,7 @@ async def appeal(interaction: discord.Interaction):
     await interaction.response.send_modal(AppealModal())
 
 #OTD Modal
-class otd(discord.ui.Modal, title="OTD Form"):
+class OTD(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
     otd = discord.ui.TextInput(label="OTD Style", placeholder="QOTD, ROTD, FOTD, etc.", required=True)
     date = discord.ui.TextInput(label="Date of OTD", placeholder="Date of publish", required=True)
@@ -131,19 +131,23 @@ class otd(discord.ui.Modal, title="OTD Form"):
 
         if log_channel:
             embed = discord.Embed(title="New OTD Submission", color=discord.Color.blue())
-            embed.add_field(name="Username", value=self.username, inline=True)
-            embed.add_field(name="otd", value=self.otd, inline=True)
-            embed.add_field(name="Date Of OTD", value=self.date, inline=True)
-            embed.add_field(name="Description", value=self.description, inline=True)
+            
+            # Use `.value` to access the input values
+            embed.add_field(name="Username", value=self.username.value, inline=True)
+            embed.add_field(name="OTD Style", value=self.otd.value, inline=True)
+            embed.add_field(name="Date of OTD", value=self.date.value, inline=True)
+            embed.add_field(name="Description", value=self.description.value, inline=False)
+            
             embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
-
+            
             await log_channel.send(embed=embed)
 
         await interaction.response.send_message("✅ OTD submitted successfully!", ephemeral=True)
 
+# Correctly instantiate the modal in the command
 @bot.tree.command(name="appeal", description="Open the appeal form")
 async def appeal(interaction: discord.Interaction):
-    await interaction.response.send_modal(otd())
+    await interaction.response.send_modal(OTD())
 
 # Run the bot with your token
 bot.run(os.getenv("TOKEN"))  # Fetches token securely from Render
