@@ -26,7 +26,7 @@ intents.presences = False
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="$", intents=intents)
+bot = discord.Bot()
 
 used_dates = {}
 
@@ -47,51 +47,6 @@ async def on_command_error(ctx, error):
     else:
         raise error  # Raise other errors normally
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send(f"Hello, {ctx.author.mention}!")
-
-@bot.command()
-async def test(ctx):
-    await ctx.send(f"Bot is running!")
-
-# Bulk delete command
-@bot.command()
-@commands.has_permissions(manage_messages=True)  # Ensure the user has the 'Manage Messages' permission
-async def delete(ctx, amount: int):
-    if amount < 1 or amount > 100:
-        await ctx.send("Please specify a number between 1 and 100.")
-        return
-
-    deleted = await ctx.channel.purge(limit=amount)
-    await ctx.send(f'Deleted {len(deleted)} message(s).', delete_after=5)  # Message will auto-delete after 5 seconds
-
-
-# About command with embed
-@bot.command()
-async def about(ctx):
-    embed = discord.Embed(
-        title="About This Bot",
-        description="Here is some information about me!",
-        color=discord.Color.blue()  # You can change this to any color you like
-    )
-
-    embed.add_field(name="Bot Name", value="The PR Bot", inline=False)
-    embed.add_field(name="Version", value="1.0.0", inline=False)
-    embed.add_field(name="Creator", value="the.username_", inline=False)
-    embed.add_field(name="Description", value="Serving the PR department", inline=False)
-
-    await ctx.send(embed=embed)
-
-#ping command
-@bot.command()
-async def ping(ctx):
-    """
-    Responds with 'Pong!' and the bot's latency in ms.
-    """
-    latency = round(bot.latency * 1000)  # Convert latency to milliseconds
-    await ctx.send(f"Pong! Latency: {latency}ms")
-    
 #OTD Modal
 class otd_modal(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
