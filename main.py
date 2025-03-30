@@ -149,18 +149,20 @@ async def ping(ctx):
 #Appeal Command Modal
 class AppealModal(discord.ui.Modal, title="Appeal Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
-    appeal_id = discord.ui.TextInput(label="Appeal ID", placeholder="Enter your appeal ID", required=True)
-    date = discord.ui.TextInput(label="Date", placeholder="Enter the date (YYYY-MM-DD)", required=True)
+    date = discord.ui.TextInput(label="Date", placeholder="Enter the current date (YYYY-MM-DD)", required=True)
+    appeal = discord.ui.TextInput(label="Decision Being Appealed", placeholder="Ban/Termination/Resignation/Demotion", required=True)
+    reason = discord.ui.TextInput(label="Reason for Appeal", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
-        log_channel_id = 1355715603595399290  # Replace with your channel ID
+        log_channel_id = 1355719894032715969  # Replace with your channel ID
         log_channel = interaction.client.get_channel(log_channel_id)
 
         if log_channel:
             embed = discord.Embed(title="New Appeal Submission", color=discord.Color.blue())
             embed.add_field(name="Username", value=self.username, inline=True)
-            embed.add_field(name="Appeal ID", value=self.appeal_id, inline=True)
             embed.add_field(name="Date", value=self.date, inline=True)
+            embed.add_field(name="Appeal Type", value=self.appeal, inline=True)
+            embed.add_field(name="Reason for Appeal", value=self.reason, inline=True)
             embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
 
             await log_channel.send(embed=embed)
