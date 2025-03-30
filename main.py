@@ -149,12 +149,12 @@ async def ping(ctx):
 #Appeal Command Modal
 class AppealModal(discord.ui.Modal, title="Appeal Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
-    date = discord.ui.TextInput(label="Date", placeholder="Enter the current date (YYYY-MM-DD)", required=True)
     appeal = discord.ui.TextInput(label="Decision Being Appealed", placeholder="Ban/Termination/Resignation/Demotion", required=True)
+    date = discord.ui.TextInput(label="Date of Punishment", placeholder="Enter the date of Resignation, Ban, etc. (YYYY-MM-DD)", required=True)
     reason = discord.ui.TextInput(label="Reason for Appeal", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
-        log_channel_id = 1355719894032715969  # Replace with your channel ID
+        log_channel_id = 1348299280959668254  # Replace with your channel ID
         log_channel = interaction.client.get_channel(log_channel_id)
 
         if log_channel:
