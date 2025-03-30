@@ -146,16 +146,27 @@ async def ping(ctx):
     latency = round(bot.latency * 1000)  # Convert latency to milliseconds
     await ctx.send(f"Pong! Latency: {latency}ms")
 
+#Appeal Command Modal
 class AppealModal(discord.ui.Modal, title="Appeal Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
     appeal_id = discord.ui.TextInput(label="Appeal ID", placeholder="Enter your appeal ID", required=True)
     date = discord.ui.TextInput(label="Date", placeholder="Enter the date (YYYY-MM-DD)", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.send_message(
-            f"✅ Appeal submitted:\n- Username: {self.username}\n- Appeal ID: {self.appeal_id}\n- Date: {self.date}",
-            ephemeral=True
-        )
+        log_channel_id = 1355715603595399290  # Replace with your channel ID
+        log_channel = interaction.client.get_channel(log_channel_id)
+
+        if log_channel:
+            embed = discord.Embed(title="New Appeal Submission", color=discord.Color.blue())
+            embed.add_field(name="Username", value=self.username, inline=True)
+            embed.add_field(name="Appeal ID", value=self.appeal_id, inline=True)
+            embed.add_field(name="Date", value=self.date, inline=True)
+            embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
+
+            await log_channel.send(embed=embed)
+
+        await interaction.response.send_message("✅ Appeal submitted successfully!", ephemeral=True)
+
 @bot.tree.command(name="appeal", description="Open the appeal form")
 async def appeal(interaction: discord.Interaction):
     await interaction.response.send_modal(AppealModal())
