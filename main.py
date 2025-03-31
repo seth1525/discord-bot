@@ -46,6 +46,11 @@ async def on_error(event, *args, **kwargs):
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
 
+# Bot Status Version command
+@bot.tree.command(name="status", description="Check status of the bot")
+async def status(interaction: discord.Interaction):
+    await interaction.response.send_message(f"Bot online! Version: 1.0.0.3")
+
 # OTD Modal
 class otd_modal(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
