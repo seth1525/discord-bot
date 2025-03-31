@@ -45,6 +45,19 @@ async def on_error(event, *args, **kwargs):
 @bot.tree.command(name="ping", description="Check the bot's latency")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
+    
+@bot.tree.command(name="about", description="About the bot")
+async def about(interaction: discord.Interaction):
+    
+    embed = discord.Embed(title="About the bot", color=discord.Color.blue())
+    embed.add_field(name="Creator", value="@the.username_", inline=True)
+    embed.add_field(name="Version", value="1.0.0.0", inline=True)
+    embed.add_field(name="Bot Language", value="Python 2.5.2", inline=True)
+    embed.add_field(name="Bot Hosting", value="Render.com", inline=True)
+    embed.add_field(name="Bot Monitor", value="UptimeRobot", inline=True)
+    
+    
+    await interaction.response.send_message(embed=embed)
 
 # Bot Status Version command
 @bot.tree.command(name="status", description="Check status of the bot")
