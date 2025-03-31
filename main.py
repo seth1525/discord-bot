@@ -1,10 +1,28 @@
 import discord
 from discord.ext import commands
 import os
+from flask import Flask
+from threading import Thread
+
+# Initialize Flask
+app = Flask(__name__)
 
 # Discord bot setup
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+# Flask endpoint for uptime monitoring
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+# Function to keep the Flask app running in a separate thread
+def run_flask():
+    app.run(host="0.0.0.0", port=8080)
+
+# Start Flask in a separate thread
+thread = Thread(target=run_flask)
+thread.start()
 
 @bot.event
 async def on_ready():
