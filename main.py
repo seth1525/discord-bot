@@ -42,10 +42,10 @@ async def on_error(event, *args, **kwargs):
     raise  # Optional: Raise the error for debugging
 
 # Ping command
-@bot.tree.command(name="ping", description="Check the bot's latency")
+""" @bot.tree.command(name="ping", description="Check the bot's latency")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
-    
+"""
 @bot.tree.command(name="about", description="About the bot")
 async def about(interaction: discord.Interaction):
     
