@@ -35,6 +35,10 @@ async def on_ready():
         print(f"Synced {len(synced)} commands.")
     except Exception as e:
         print(f"Failed to sync commands: {e}")
+        
+@bot.event
+async def on_rate_limit(rate_limit_info):
+    print(f"Rate limit hit! Sleeping for {rate_limit_info.retry_after:.2f} seconds.")
 
 @bot.event
 async def on_error(event, *args, **kwargs):
@@ -46,9 +50,10 @@ async def on_error(event, *args, **kwargs):
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
 """
+
 @bot.tree.command(name="about", description="About the bot")
+@commands.cooldown(1, 5, commands.BucketType.user)  # 1 use per 5 seconds per user
 async def about(interaction: discord.Interaction):
-    
     embed = discord.Embed(title="About the bot", color=discord.Color.blue())
     embed.add_field(name="Creator", value="@the.username_", inline=True)
     embed.add_field(name="Version", value="1.0.0.0", inline=True)
@@ -56,8 +61,12 @@ async def about(interaction: discord.Interaction):
     embed.add_field(name="Bot Hosting", value="Render.com", inline=True)
     embed.add_field(name="Bot Monitor", value="UptimeRobot", inline=True)
     
-    
     await interaction.response.send_message(embed=embed)
+
+@about.error
+async def about_error(interaction: discord.Interaction, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await interaction.response.send_message(f"⏳ Please wait {round(error.retry_after, 2)} seconds before using this command again.", ephemeral=True)
 
 # Bot Status Version command
 @bot.tree.command(name="status", description="Check status of the bot")
