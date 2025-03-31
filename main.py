@@ -1,31 +1,21 @@
 import discord
-from flask import Flask
-from threading import Thread
+from discord.ext import commands
 import os
 
-# Flask setup for UptimeRobot monitoring
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "I'm alive!"
-
-def run():
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)))
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
-
-keep_alive()
-
 # Discord bot setup
-bot = discord.Bot()
+intents = discord.Intents.default()
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
     print("Bot is ready!")
+
+    try:
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} commands.")
+    except Exception as e:
+        print(f"Failed to sync commands: {e}")
 
 @bot.event
 async def on_error(event, *args, **kwargs):
@@ -38,4 +28,4 @@ async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
 
 # Run the bot
-bot.run(os.getenv("TOKEN"))
+bot.run(os.getenv('TOKEN'))  # Get token from environment variable
