@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from datetime import datetime
 import os
 from flask import Flask
 from threading import Thread
@@ -45,7 +46,7 @@ async def on_error(event, *args, **kwargs):
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f"Pong! Latency is {bot.latency * 1000:.2f}ms")
 
-#OTD Modal
+# OTD Modal
 class otd_modal(discord.ui.Modal, title="OTD Form"):
     username = discord.ui.TextInput(label="Username", placeholder="Enter your username", required=True)
     otd = discord.ui.TextInput(label="OTD Style", placeholder="QOTD, ROTD, FOTD, etc.", required=True)
@@ -61,11 +62,14 @@ class otd_modal(discord.ui.Modal, title="OTD Form"):
             if not log_channel:
                 raise ValueError("Log channel not found.")
             
+            # Convert string to datetime object (assuming format is YYYY-MM-DD)
+            date_obj = datetime.strptime(self.date.value, "%Y-%m-%d")
+            
             # Create embed for the OTD submission
             embed = discord.Embed(title="New OTD Submission", color=discord.Color.blue())
             embed.add_field(name="Username", value=self.username.value, inline=True)
             embed.add_field(name="OTD Style", value=self.otd.value, inline=True)
-            embed.add_field(name="Date of OTD", value=self.date.value.strftime("%B %d, %Y"), inline=True)
+            embed.add_field(name="Date of OTD", value=date_obj.strftime("%B %d, %Y"), inline=True)  # Correct formatting
             embed.add_field(name="Description", value=self.description.value, inline=False)
             embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
             
