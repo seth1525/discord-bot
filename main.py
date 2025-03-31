@@ -65,7 +65,7 @@ class otd_modal(discord.ui.Modal, title="OTD Form"):
             embed = discord.Embed(title="New OTD Submission", color=discord.Color.blue())
             embed.add_field(name="Username", value=self.username.value, inline=True)
             embed.add_field(name="OTD Style", value=self.otd.value, inline=True)
-            embed.add_field(name="Date of OTD", value=self.date.value, inline=True)
+            embed.add_field(name="Date of OTD", value=self.date.value.strftime("%B %d, %Y"), inline=True)
             embed.add_field(name="Description", value=self.description.value, inline=False)
             embed.set_footer(text=f"Submitted by {interaction.user} (ID: {interaction.user.id})")
             
